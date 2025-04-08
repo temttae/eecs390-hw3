@@ -1,0 +1,12 @@
+Test foo passed
+
+Test bar failed ASSERT_TRUE(0) at utf_test.cpp:9
+
+Test baz failed ASSERT_EQUAL(0, 2 - 1) at utf_test.cpp:13
+
+Test qux failed with exception: std::exception
+
+Test xyzzy failed with unknown exception
+
+Passed 1 of 5 test(s) 
+Failed 4 of 5 test(s)
