@@ -36,6 +36,10 @@ public:
   // EFFECTS: Returns a pointer to the singleton instance of this class.
   static UTFTestSuite* get() {
     // replace with your code
+    if (nullptr == test_suite) {
+      test_suite = new UTFTestSuite;
+    }
+    return test_suite;
   }
 
   // EFFECTS: Registers the given test case.
@@ -104,7 +108,15 @@ UTFTestCase::UTFTestCase(const std::string &name) : name(name) {
 // 2) Create an instance of the derived class.
 // 3) Define the run() method of the derived class, using the body
 //    that follows the TEST(...) invocation.
-#define TEST(name)  // replace with your code
+// replace with your code
+#define TEST(name)                                      \
+  class name##_TestCase : public UTFTestCase {          \
+  public:                                               \
+    name##_TestCase() : UTFTestCase(#name) {}           \
+    void run() override;                                \
+  };                                                    \
+  static name##_TestCase name##_test_instance;          \
+  void name##_TestCase::run()
 
 // Defines the main() function for the test file.
 #define TEST_MAIN()                                     \
@@ -120,7 +132,14 @@ UTFTestCase::UTFTestCase(const std::string &name) : name(name) {
 // UTFFailure if it is not. See utf_test.out.correct for the format of
 // message that should be passed to the UTFFailure constructor.
 // diagnostic is the actual text of the assertion.
-#define UTF_CHECK(value, diagnostic)  // replace with your code
+// replace with your code
+#define UTF_CHECK(value, diagnostic)                    \
+  if (!(value)) {                                       \
+    throw UTFFailure(                                   \
+      diagnostic " at " __FILE__ ":"                    \
+      + std::to_string(__LINE__)                        \
+    );                                                  \
+  }
 
 #define ASSERT_TRUE(expr)                       \
   UTF_CHECK(expr, "ASSERT_TRUE(" # expr ")")
