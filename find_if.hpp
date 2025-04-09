@@ -12,7 +12,10 @@ namespace eecs390 {
   //          element exists.
   template<typename Iterator, typename Predicate>
   Iterator find_if(Iterator begin, Iterator end, Predicate pred) {
-    return end;  // replace with your code
+    for (Iterator it = begin; it != end; ++it) {
+      if (pred(*it)) return it;
+    }
+    return end;
   }
 
 }

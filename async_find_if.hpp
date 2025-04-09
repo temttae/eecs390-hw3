@@ -28,7 +28,24 @@ namespace eecs390 {
     std::size_t count_per_task = size / num_tasks;
 
     std::vector<std::future<Iterator>> results;
-    return end;  // replace with your code
+    
+    for (int i = 0; i < num_tasks; ++i) {
+      Iterator chunk_begin = begin + i * count_per_task;
+      Iterator chunk_end = chunk_begin + count_per_task;
+  
+      results.push_back(std::async([=]() {
+        return eecs390::find_if<Iterator, Predicate>(chunk_begin, chunk_end, pred);
+      }));
+    }
+    
+    for (int i = 0; i < num_tasks; ++i) {
+      Iterator result = results[i].get();
+      if (result != begin + i * count_per_task + count_per_task) {
+        return result;
+      }
+    }
+  
+    return end;
   }
 
 }
